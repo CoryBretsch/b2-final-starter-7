@@ -35,4 +35,6 @@ FactoryBot.define do
     item
     invoice
   end
+
+
 end
