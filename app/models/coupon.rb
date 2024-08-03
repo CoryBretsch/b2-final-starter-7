@@ -12,4 +12,12 @@ class Coupon < ApplicationRecord
   belongs_to :invoice, optional: true
 
   enum category: ["Percent Off", "Dollar Value Off"]
+
+  def self.active_coupons 
+    where(active: true)
+  end
+
+  def self.deactivated_coupons 
+    where(active: false)
+  end
 end

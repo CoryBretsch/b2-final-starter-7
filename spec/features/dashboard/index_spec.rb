@@ -127,8 +127,8 @@ RSpec.describe "merchant dashboard" do
   # -------------------------------
   # -------------------------------
 
-  describe "user story 1" do 
-    it "from merchant dashboard, link to view all coupons names as links, and lists all attributes" do
+  describe "user story 1 & user story 6" do 
+    it "from merchant dashboard, link to view all coupons as links in 2 categories, and lists all attributes " do
       expect(page).to have_link "Coupons"
 
       click_link "Coupons"
