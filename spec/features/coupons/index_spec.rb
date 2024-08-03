@@ -43,7 +43,7 @@ RSpec.describe "coupons index" do
 
     @coupon1 = FactoryBot.create(:coupon, category: 0, active: true, merchant_id: @merchant1.id)
     @coupon2 = FactoryBot.create(:coupon, category: 1, merchant_id: @merchant1.id)
-    @coupon3 = FactoryBot.create(:coupon, merchant_id: @)
+    @coupon3 = FactoryBot.create(:coupon, merchant_id: @merchant2.id)
   end
 
     describe "user story 1 & user story 6" do 
@@ -55,17 +55,17 @@ RSpec.describe "coupons index" do
         within ".active-coupons" do 
           expect(page).to have_content("Active Coupons")
           within "#coupon-#{@coupon1.id}" do
-            expect(page).to have_link("#{@coupon1.name}", :href => merchant_coupon_path(@merchant1))
+            expect(page).to have_link("#{@coupon1.name}", :href => merchant_coupon_path(@merchant1, @coupon1))
             expect(page).to have_content("Category: #{@coupon1.category}")
             expect(page).to have_content("Code: #{@coupon1.code}")
             expect(page).to have_content("Amount: #{@coupon1.amount}")
           end
         end
-  
+
         within ".deactivated-coupons" do
           expect(page).to have_content("Deactivated Coupons")
           within "#coupon-#{@coupon2.id}" do
-            expect(page).to have_link("#{@coupon2.name}", merchant_coupon_path(@merchant1))
+            expect(page).to have_link("#{@coupon2.name}", :href => merchant_coupon_path(@merchant1, @coupon2))
             expect(page).to have_content("Category: #{@coupon2.category}")
             expect(page).to have_content("Code: #{@coupon2.code}")
             expect(page).to have_content("Amount: #{@coupon2.amount}")
