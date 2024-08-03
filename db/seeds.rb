@@ -56,8 +56,8 @@
 # @coupon2 = Coupon.create!(name: "Fimmy", code: Faker::Barcode.unique.ismn, category: 1, active: false, merchant_id: @m1.id )
 # @invoice1 = Invoice.create!(customer_id: @c2.id, status: 2, coupon_id: @coupon1.id )
 
-@coupon3 = FactoryBot.create(:coupon)
-@coupon4 = FactoryBot.create(:coupon)
-@invoice = FactoryBot.create(:invoice, coupon_id: @coupon3.id)
+@coupon1 = FactoryBot.create(:coupon)
+@coupon2 = FactoryBot.create(:coupon, active: true)
+@invoice = FactoryBot.create(:invoice, coupon_id: @coupon1.id)
 # Rake::Task["csv_load:all"].invoke
 

@@ -41,6 +41,7 @@ FactoryBot.define do
     code {Faker::Barcode.unique.ismn}
     category {[0,1].sample}
     active { false }
+    amount {Faker::Number.between(from: 1, to: 100)}
     merchant
   end
 
