@@ -40,11 +40,9 @@ RSpec.describe "merchant dashboard" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    @coupon1 = create(:coupon)
-    @coupon2 = create(:coupon)
-    @coupon3 = create(:coupon)
-    @coupon4 = create(:coupon)
-    @coupon5 = create(:coupon)
+    @coupon1 = FactoryBot.create(:coupon, category: 0, active: true, merchant_id: @merchant1.id)
+    @coupon2 = FactoryBot.create(:coupon, category: 1, merchant_id: @merchant1.id)
+  
     
     visit merchant_dashboard_index_path(@merchant1)
   end
@@ -126,7 +124,36 @@ RSpec.describe "merchant dashboard" do
     expect(page).to have_content(@invoice_1.created_at.strftime("%A, %B %-d, %Y"))
   end
 
+  # -------------------------------
+  # -------------------------------
+
   describe "user story 1" do 
-    it "from merchant dashboard, link to view all coupons names as links, and lists all attributes"
+    it "from merchant dashboard, link to view all coupons names as links, and lists all attributes" do
+      expect(page).to have_link "Coupons"
+
+      click_link "Coupons"
+
+      expect(current_path).to eq(merchant_coupons_path(@merchant1))
+
+      within ".active-coupons" do 
+        within "#coupon-#{@coupon1.id}" do
+          expect(page).to have_link("#{@coupon1.name}", merchant_coupon_path(@merchant1))
+          expect(page).to have_content("Category: #{@coupon1.category}")
+          expect(page).to have_content("Code: #{@coupon1.code}")
+          expect(page).to have_content("Amount: #{@coupon1.amount}")
+        end
+      end
+
+      within ".deactivated-coupons" do 
+        within "#coupon-#{@coupon2.id}" do
+          expect(page).to have_link("#{@coupon2.name}", merchant_coupon_path(@merchant1))
+          expect(page).to have_content("Category: #{@coupon2.category}")
+          expect(page).to have_content("Code: #{@coupon2.code}")
+          expect(page).to have_content("Amount: #{@coupon2.amount}")
+        end
+      end
+
+      
+    end 
   end
 end
