@@ -118,6 +118,14 @@ describe Merchant do
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
 
+      @coupon1 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+      @coupon2 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+      @coupon3 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant2.id)
+
+      @coupon4 = FactoryBot.create(:coupon, active: false, merchant_id: @merchant1.id)
+      @coupon5 = FactoryBot.create(:coupon, active: false, merchant_id: @merchant1.id)
+      @coupon6 = FactoryBot.create(:coupon, active: false, merchant_id: @merchant2.id)
+
     end
     it "can list items ready to ship" do
       expect(@merchant1.ordered_items_to_ship).to eq([@ii_1, @ii_2, @ii_4, @ii_6, @ii_7, @ii_8, @ii_9, @ii_10])
@@ -146,6 +154,19 @@ describe Merchant do
     it "disabled_items" do 
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
+    end
+
+    # ---------------
+    # -------------------
+    
+    it "can return #active_coupons" do 
+      expect(@merchant1.active_coupons).to eq([@coupon1, @coupon2])
+      expect(@merchant2.active_coupons).to eq([@coupon3])
+    end
+
+    it "can return #deactivated_coupons" do 
+      expect(@merchant1.deactivated_coupons).to eq([@coupon4, @coupon5])
+      expect(@merchant2.deactivated_coupons).to eq([@coupon6])
     end
   end
 end

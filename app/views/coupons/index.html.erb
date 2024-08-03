@@ -1,0 +1,22 @@
+<section class="active-coupons">
+    <b><h3>Active Coupons</h3></b>
+      <% @active_coupons.each do |coupon| %> 
+          <div id="coupon-<%=-coupon.id%>">
+            <p><%= link_to "#{coupon.name}", merchant_coupon_path(merchant, coupon) %></p>
+            <p>Code: <%="#{coupon.code}"%></p>
+            <p>Category: <%=coupon.category%></p>
+            <p>Amount: <%=coupon.amount%></p>
+          </div>
+      <%end%>
+  </section>
+<section class="deactivated-coupons">
+  <b><h3>Deactivated Coupons</h3></b>
+    <% @deactivated_coupons.each do |coupon| %> 
+      <div id="coupon-<%=-coupon.id%>">
+        <p><%= link_to "#{coupon.name}", merchant_coupon_path(merchant, coupon) %></p>
+        <p>Code: <%="#{coupon.code}"%></p>
+        <p>Category: <%=coupon.category%></p>
+        <p>Amount: <%=coupon.amount%></p>
+      </div>
+  <%end%>
+</section>

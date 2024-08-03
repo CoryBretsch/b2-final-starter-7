@@ -13,11 +13,4 @@ class Coupon < ApplicationRecord
 
   enum category: ["Percent Off", "Dollar Value Off"]
 
-  def self.active_coupons 
-    where(active: true)
-  end
-
-  def self.deactivated_coupons 
-    where(active: false)
-  end
 end
