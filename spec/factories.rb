@@ -36,12 +36,12 @@ FactoryBot.define do
     invoice
   end
 
-  # factory :coupon do 
-  #   name {Faker::Fantasy::Tolkien.poem}
-  #   code {Faker::Barcode.unique.ismn}
-  #   category {[0,1].sample}
-  #   activated { false }
-  #   merchant
-  # end
+  factory :coupon do 
+    name {Faker::Fantasy::Tolkien.poem}
+    code {Faker::Barcode.unique.ismn}
+    category {[0,1].sample}
+    active { false }
+    merchant
+  end
 
 end

@@ -40,6 +40,12 @@ RSpec.describe "merchant dashboard" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
+    @coupon1 = create(:coupon)
+    @coupon2 = create(:coupon)
+    @coupon3 = create(:coupon)
+    @coupon4 = create(:coupon)
+    @coupon5 = create(:coupon)
+    
     visit merchant_dashboard_index_path(@merchant1)
   end
 

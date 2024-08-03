@@ -46,8 +46,18 @@
 @t6 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @i1.id)
 @merchant1 = Merchant.create!(name: 'Hair Care')
 
-@coupon1 = Coupon.create!(name: "Fimmy", code: Faker::Barcode.unique.ismn, category: 0, status: 0, merchant_id: @m1.id )
-@coupon2 = Coupon.create!(name: "Fimmy", code: Faker::Barcode.unique.ismn, category: 1, status: 1, merchant_id: @m1.id )
-Invoice.create!(customer_id: @c2.id, status: 2, coupon_id: @coupon1.id )
+# @coupon1 = Coupon.create!(name: "Fimmy", code: Faker::Barcode.unique.ismn, category: 0, active: 0, merchant_id: @m1.id )
+# @coupon2 = Coupon.create!(name: "Fimmy", code: Faker::Barcode.unique.ismn, category: 1, active: 1, merchant_id: @m1.id )
+# Invoice.create!(customer_id: @c2.id, status: 2, coupon_id: @coupon1.id )
+
+@merchant2 = FactoryBot.create(:merchant)
+
+# @coupon1 = Coupon.create!(name: "Fimmy", code: Faker::Barcode.unique.ismn, category: 0, active: false, merchant_id: @m1.id )
+# @coupon2 = Coupon.create!(name: "Fimmy", code: Faker::Barcode.unique.ismn, category: 1, active: false, merchant_id: @m1.id )
+# @invoice1 = Invoice.create!(customer_id: @c2.id, status: 2, coupon_id: @coupon1.id )
+
+@coupon3 = FactoryBot.create(:coupon)
+@coupon4 = FactoryBot.create(:coupon)
+@invoice = FactoryBot.create(:invoice, coupon_id: @coupon3.id)
 # Rake::Task["csv_load:all"].invoke
 

@@ -90,4 +90,14 @@ namespace :csv_load do
       end
    end
 
+  #  task :destroy do 
+  #    Transactions.destroy_all
+  #    Invoice_items.destroy_all
+  #    Items.destroy_all
+  #    Coupons.destroy_all
+  #    Merchants.destroy_all
+  #    Invoices.destroy_all 
+  #    Customers.destroy_all
+  #  end
+
 end
