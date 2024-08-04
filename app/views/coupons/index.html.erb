@@ -1,3 +1,9 @@
+<h3><b>Coupons</b></h3>
+
+<section class="new-coupon">
+  <%= link_to "Create Coupon", new_merchant_coupon_path(@merchant) %>
+</section>
+
 <section class="active-coupons">
     <b><h3>Active Coupons</h3></b>
       <% @active_coupons.each do |coupon| %> 
@@ -9,9 +15,9 @@
           </div>
       <%end%>
   </section>
-<section class="deactivated-coupons">
-  <b><h3>Deactivated Coupons</h3></b>
-    <% @deactivated_coupons.each do |coupon| %> 
+<section class="inactive-coupons">
+  <b><h3>Inactive Coupons</h3></b>
+    <% @inactive_coupons.each do |coupon| %> 
       <div id="coupon-<%=coupon.id%>">
         <p><%= link_to coupon.name, merchant_coupon_path(@merchant, coupon) %></p>
         <p>Code: <%=coupon.code%></p>

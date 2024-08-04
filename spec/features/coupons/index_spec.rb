@@ -51,7 +51,7 @@ RSpec.describe "coupons index" do
         visit merchant_dashboard_index_path(@merchant1)
       
         click_link "Coupons"
-  
+
         within ".active-coupons" do 
           expect(page).to have_content("Active Coupons")
           within "#coupon-#{@coupon1.id}" do
@@ -62,8 +62,8 @@ RSpec.describe "coupons index" do
           end
         end
 
-        within ".deactivated-coupons" do
-          expect(page).to have_content("Deactivated Coupons")
+        within ".inactive-coupons" do
+          expect(page).to have_content("Inactive Coupons")
           within "#coupon-#{@coupon2.id}" do
             expect(page).to have_link("#{@coupon2.name}", :href => merchant_coupon_path(@merchant1, @coupon2))
             expect(page).to have_content("Category: #{@coupon2.category}")
@@ -72,5 +72,57 @@ RSpec.describe "coupons index" do
           end
         end
       end 
+    end
+
+    describe "user story 2" do 
+      it "can create a new coupon - happy path" do 
+        visit merchant_coupons_path(@merchant1)
+
+        within ".new-coupon" do
+          expect(page).to have_link("Create Coupon")
+        end
+
+        click_link "Create Coupon"
+
+        expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
+        
+        fill_in "Name", with: "Extra Values Time"
+        fill_in "Code", with: "8392BD098"
+        select "Dollar Value Off"
+        fill_in "Amount", with: 50
+        click_on "Create Coupon"
+
+        expect(current_path).to eq(merchant_coupons_path(@merchant1))
+        @coupon = Coupon.last
+
+        within ".inactive-coupons" do 
+          expect(page).to have_link("#{@coupon.name}", :href => merchant_coupon_path(@merchant1, @coupon))
+            expect(page).to have_content("Category: #{@coupon.category}")
+            expect(page).to have_content("Code: #{@coupon.code}")
+            expect(page).to have_content("Amount: #{@coupon.amount}")
+        end
+      end
+
+      it "can make sure code is unique value - sad path" do 
+        visit new_merchant_coupon_path(@merchant1)
+
+        fill_in "Name", with: "Extra Values Time"
+        fill_in "Code", with: "8392BD098"
+        select "Dollar Value Off"
+        fill_in "Amount", with: 50
+        click_on "Create Coupon"
+
+        expect(current_path).to eq(merchant_coupons_path(@merchant1))
+        click_link "Create Coupon"
+
+        fill_in "Name", with: "Timmy"
+        fill_in "Code", with: "8392BD098"
+        select "Dollar Value Off"
+        fill_in "Amount", with: 50
+        click_on "Create Coupon"
+
+        expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
+        expect(page).to have_content("Error, code must be unique")
+      end
     end
   end

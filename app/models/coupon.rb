@@ -4,9 +4,9 @@ class Coupon < ApplicationRecord
                         :merchant_id,
                         :code,
                         :amount
-  validates_numericality_of :amount
+  validates_numericality_of :amount 
   validates :active, inclusion: {in: [true, false]}
-  # validates :code, uniqueness: true
+  validates :code, uniqueness: true
 
   belongs_to :merchant 
   belongs_to :invoice, optional: true

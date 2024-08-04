@@ -1,0 +1,19 @@
+<h3><b>New Coupon Form</b></h3>
+
+<%= form_with url: merchant_coupons_path(@merchant), data: {turbo: false} do |form| %>
+  <p><%= form.label :name %>
+  <%= form.text_field :name%></p>
+
+  <p><%= form.label :code %>
+  <%= form.text_field :code %></p>
+
+  <p><%= form.label :category %>
+  <%= form.select :category, ["Percent Off", "Dollar Value Off"] %></p>
+
+  <p><%= form.label :amount %>
+  <%= form.number_field :amount %></p>
+
+  <p><%= form.submit "Create Coupon" %></p>
+<% end %>
+  
+  
