@@ -9,9 +9,7 @@
       <% @active_coupons.each do |coupon| %> 
           <div id="coupon-<%=coupon.id%>">
             <p><%= link_to coupon.name, merchant_coupon_path(@merchant, coupon) %></p>
-            <p>Code: <%=coupon.code%></p>
-            <p>Category: <%=coupon.category%></p>
-            <p>Amount: <%=coupon.amount%></p>
+            <p>Discount: <%=coupon.category%> is <%=coupon.amount%></p>
           </div>
       <%end%>
   </section>
@@ -20,9 +18,7 @@
     <% @inactive_coupons.each do |coupon| %> 
       <div id="coupon-<%=coupon.id%>">
         <p><%= link_to coupon.name, merchant_coupon_path(@merchant, coupon) %></p>
-        <p>Code: <%=coupon.code%></p>
-        <p>Category: <%=coupon.category%></p>
-        <p>Amount: <%=coupon.amount%></p>
+        <p>Discount: <%=coupon.category%> is <%=coupon.amount%></p>
       </div>
   <%end%>
 </section>

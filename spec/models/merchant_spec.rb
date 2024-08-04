@@ -165,8 +165,8 @@ describe Merchant do
     end
 
     it "can return #deactivated_coupons" do 
-      expect(@merchant1.deactivated_coupons).to eq([@coupon4, @coupon5])
-      expect(@merchant2.deactivated_coupons).to eq([@coupon6])
+      expect(@merchant1.inactive_coupons).to eq([@coupon4, @coupon5])
+      expect(@merchant2.inactive_coupons).to eq([@coupon6])
     end
   end
 end

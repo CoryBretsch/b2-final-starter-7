@@ -9,7 +9,7 @@ class Coupon < ApplicationRecord
   validates :code, uniqueness: true
 
   belongs_to :merchant 
-  belongs_to :invoice, optional: true
+  has_many :invoices
 
   enum category: ["Percent Off", "Dollar Value Off"]
 

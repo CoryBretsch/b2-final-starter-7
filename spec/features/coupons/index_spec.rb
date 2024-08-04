@@ -56,9 +56,8 @@ RSpec.describe "coupons index" do
           expect(page).to have_content("Active Coupons")
           within "#coupon-#{@coupon1.id}" do
             expect(page).to have_link("#{@coupon1.name}", :href => merchant_coupon_path(@merchant1, @coupon1))
-            expect(page).to have_content("Category: #{@coupon1.category}")
-            expect(page).to have_content("Code: #{@coupon1.code}")
-            expect(page).to have_content("Amount: #{@coupon1.amount}")
+            expect(page).to have_content("Discount: #{@coupon1.category}")
+            expect(page).to have_content(" is #{@coupon1.amount}")
           end
         end
 
@@ -66,9 +65,8 @@ RSpec.describe "coupons index" do
           expect(page).to have_content("Inactive Coupons")
           within "#coupon-#{@coupon2.id}" do
             expect(page).to have_link("#{@coupon2.name}", :href => merchant_coupon_path(@merchant1, @coupon2))
-            expect(page).to have_content("Category: #{@coupon2.category}")
-            expect(page).to have_content("Code: #{@coupon2.code}")
-            expect(page).to have_content("Amount: #{@coupon2.amount}")
+            expect(page).to have_content("Discount: #{@coupon2.category}")
+            expect(page).to have_content(" is #{@coupon2.amount}")
           end
         end
       end 
@@ -97,9 +95,8 @@ RSpec.describe "coupons index" do
 
         within ".inactive-coupons" do 
           expect(page).to have_link("#{@coupon.name}", :href => merchant_coupon_path(@merchant1, @coupon))
-            expect(page).to have_content("Category: #{@coupon.category}")
-            expect(page).to have_content("Code: #{@coupon.code}")
-            expect(page).to have_content("Amount: #{@coupon.amount}")
+            expect(page).to have_content("Discount: #{@coupon.category}")
+            expect(page).to have_content(" is #{@coupon.amount}")
         end
       end
 
