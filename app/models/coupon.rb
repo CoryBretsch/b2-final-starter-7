@@ -10,7 +10,11 @@ class Coupon < ApplicationRecord
 
   belongs_to :merchant 
   has_many :invoices
+  has_many :transactions, through: :invoices
 
   enum category: ["Percent Off", "Dollar Value Off"]
 
+  def redeemed 
+    transactions.where("result=1").count
+  end
 end
