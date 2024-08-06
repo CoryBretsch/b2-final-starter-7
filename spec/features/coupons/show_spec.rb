@@ -52,6 +52,7 @@ RSpec.describe "coupon show" do
       
       click_on "Coupons"
       click_on "#{@coupon1.name}"
+      expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon1))
 
       expect(page).to have_content("Name: #{@coupon1.name}")
       expect(page).to have_content("Code: #{@coupon1.code}")
@@ -60,4 +61,24 @@ RSpec.describe "coupon show" do
       expect(page).to have_content("Redeemed #{@coupon1.redeemed} times")
     end
   end
+
+  describe "User Story 4" do 
+    it "can deactivate an active coupon" do 
+      visit merchant_coupon_path(@merchant1, @coupon1)
+
+      expect(page).to have_content("Active: true")
+      expect(page).to have_button("Deactivate")
+      expect(page).to_not have_button("Activate")
+
+      click_button "Deactivate"
+
+      expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon1))
+      
+      expect(page).to have_content("Active: false")
+      expect(page).to have_button("Activate")
+      expect(page).to_not have_button("Deactivate")
+    end
+  end
+
+  describe "
 end

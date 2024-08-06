@@ -3,5 +3,10 @@
 <p><%= "Name: #{@coupon.name}" %></p>
 <p><%= "Code: #{@coupon.code}" %></p>
 <p><%= "Discount: #{@coupon.category} is #{@coupon.amount}" %></p>
-<p><%= "Active: #{@coupon.active}" %></p>
+<p><%= "Active: #{@coupon.active}" %>
+  <% if @coupon.active == true %>
+    <%= button_to "Deactivate", merchant_coupon_path(@merchant, @coupon), method: :patch, params: { value: :deactivate }%></p>
+  <% else %>
+    <%= button_to "Activate", merchant_coupon_path(@merchant, @coupon), method: :patch%></p>
+  <% end %>
 <p><%= "Redeemed #{@coupon.redeemed} times"%>
