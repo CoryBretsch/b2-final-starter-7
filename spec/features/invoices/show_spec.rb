@@ -100,4 +100,9 @@ RSpec.describe "invoices show" do
     end
   end
 
+  describe "user story 7" do 
+    it "can display grand total after coupon, coupon name as a link to coupon show page" do 
+      visit merchant_invoice_path(@merchant1, @invoice_4)
+    end
+  end
 end

@@ -13,7 +13,7 @@ RSpec.describe "coupon show" do
     @customer_6 = Customer.create!(first_name: "Herber", last_name: "Kuhn")
 
     @coupon1 = FactoryBot.create(:coupon, category: 0, active: true, merchant_id: @merchant1.id)
-    @coupon2 = FactoryBot.create(:coupon, category: 1, merchant_id: @merchant1.id)
+    @coupon2 = FactoryBot.create(:coupon, category: 1, active: false, merchant_id: @merchant1.id)
     @coupon3 = FactoryBot.create(:coupon, merchant_id: @merchant2.id)
 
     @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon1.id)
@@ -80,5 +80,21 @@ RSpec.describe "coupon show" do
     end
   end
 
-  describe "
+  describe "user story 5" do 
+    it "can activate an inactive coupon" do 
+      visit merchant_coupon_path(@merchant1, @coupon2)
+
+      expect(page).to have_content("Active: false")
+      expect(page).to_not have_button("Deactivate")
+      expect(page).to have_button("Activate")
+
+      click_button "Activate"
+
+      expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon2))
+
+      expect(page).to have_content("Active: true")
+      expect(page).to_not have_button("Activate")
+      expect(page).to have_button("Deactivate")
+    end
+  end
 end

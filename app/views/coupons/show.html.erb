@@ -7,6 +7,6 @@
   <% if @coupon.active == true %>
     <%= button_to "Deactivate", merchant_coupon_path(@merchant, @coupon), method: :patch, params: { value: :deactivate }%></p>
   <% else %>
-    <%= button_to "Activate", merchant_coupon_path(@merchant, @coupon), method: :patch%></p>
+    <%= button_to "Activate", merchant_coupon_path(@merchant, @coupon), method: :patch %></p>
   <% end %>
 <p><%= "Redeemed #{@coupon.redeemed} times"%>

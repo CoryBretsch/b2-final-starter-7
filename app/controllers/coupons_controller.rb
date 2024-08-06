@@ -33,6 +33,7 @@ class CouponsController < ApplicationController
       redirect_to merchant_coupon_path(@merchant, @coupon)
     else
       @coupon.update(active: true)
+      redirect_to merchant_coupon_path(@merchant, @coupon)
     end
   end
 
