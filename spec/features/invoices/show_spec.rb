@@ -5,6 +5,9 @@ RSpec.describe "invoices show" do
     @merchant1 = Merchant.create!(name: "Hair Care")
     @merchant2 = Merchant.create!(name: "Jewelry")
 
+    @coupon1 = FactoryBot.create(:coupon, amount: 20, merchant_id: @merchant1.id, category: 0, active: true)
+    @coupon2 = FactoryBot.create(:coupon, amount: 70, merchant_id: @merchant1.id, category: 1, active: true)
+
     @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
     @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
     @item_3 = Item.create!(name: "Brush", description: "This takes out tangles", unit_price: 5, merchant_id: @merchant1.id)
@@ -32,6 +35,9 @@ RSpec.describe "invoices show" do
 
     @invoice_8 = Invoice.create!(customer_id: @customer_6.id, status: 1)
 
+    @invoice_9 = Invoice.create!(customer_id: @customer_1.id, status: 2, created_at: "2012-03-27 14:54:09", coupon_id: @coupon1.id)
+    @invoice_10 = Invoice.create!(customer_id: @customer_1.id, status: 2, created_at: "2012-03-27 14:54:09", coupon_id: @coupon2.id)
+
     @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
     @ii_2 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 2)
     @ii_3 = InvoiceItem.create!(invoice_id: @invoice_3.id, item_id: @item_2.id, quantity: 2, unit_price: 8, status: 2)
@@ -43,6 +49,9 @@ RSpec.describe "invoices show" do
     @ii_10 = InvoiceItem.create!(invoice_id: @invoice_8.id, item_id: @item_5.id, quantity: 1, unit_price: 1, status: 1)
     @ii_11 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 12, unit_price: 6, status: 1)
 
+    @ii_12 = InvoiceItem.create!(invoice_id: @invoice_9.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
+    @ii_13 = InvoiceItem.create!(invoice_id: @invoice_10.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
+
     @transaction1 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_1.id)
     @transaction2 = Transaction.create!(credit_card_number: 230948, result: 1, invoice_id: @invoice_2.id)
     @transaction3 = Transaction.create!(credit_card_number: 234092, result: 1, invoice_id: @invoice_3.id)
@@ -51,6 +60,9 @@ RSpec.describe "invoices show" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
     @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
+
+    @transaction9 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_9.id)
+    @transaction10 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_10.id)
   end
 
   it "shows the invoice information" do
@@ -101,8 +113,26 @@ RSpec.describe "invoices show" do
   end
 
   describe "user story 7" do 
-    it "can display grand total after coupon, coupon name as a link to coupon show page" do 
-      visit merchant_invoice_path(@merchant1, @invoice_4)
+    it "can display percent coupon total revenue with name as link to show page" do 
+      visit merchant_invoice_path(@merchant1, @invoice_9)
+
+      expect(page).to have_content("Grand Total After Coupon: #{@invoice_9.revenue_coupon_percent(@coupon1.amount)}")
+      expect(page).to have_link("#{@coupon1.name}")
+
+      click_link("#{@coupon1.name}")
+
+      expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon1))
+    end
+
+    it "can display dollar coupon total revenue with name as link to show page" do 
+      visit merchant_invoice_path(@merchant1, @invoice_10)
+
+      expect(page).to have_content("Grand Total After Coupon: #{@invoice_10.revenue_coupon_dollar(@coupon2.amount)}")
+      expect(page).to have_link("#{@coupon2.name}")
+
+      click_link("#{@coupon2.name}")
+
+      expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon2))
     end
   end
 end

@@ -1,6 +1,6 @@
 class InvoicesController < ApplicationController
   before_action :find_invoice_and_merchant, only: [:show, :update]
-  before_action :find_merchant, only: [:index]
+  before_action :find_merchant, only: [:index, :show]
 
   def index
     @invoices = @merchant.invoices
@@ -9,6 +9,14 @@ class InvoicesController < ApplicationController
   def show
     @customer = @invoice.customer
     @invoice_item = InvoiceItem.where(invoice_id: params[:id]).first
+    if @invoice.coupon_id 
+      @coupon = Coupon.find(@invoice.coupon_id)
+      if @coupon.category == "Percent Off"
+        @grand_total = @invoice.revenue_coupon_percent(@coupon.amount)
+      else
+        @grand_total = @invoice.revenue_coupon_dollar(@coupon.amount)
+      end
+    end
   end
 
   def update
