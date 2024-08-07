@@ -31,9 +31,12 @@ class CouponsController < ApplicationController
     if params[:value]
       @coupon.update(active: false)
       redirect_to merchant_coupon_path(@merchant, @coupon)
-    else
+    elsif Coupon.active_coupon_under_five? == true
       @coupon.update(active: true)
       redirect_to merchant_coupon_path(@merchant, @coupon)
+    else
+      redirect_to merchant_coupon_path(@merchant, @coupon)
+      flash[:alert] = "You already have 5 active coupons, unkay"
     end
   end
 

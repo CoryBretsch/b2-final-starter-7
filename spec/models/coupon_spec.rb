@@ -70,4 +70,31 @@ RSpec.describe Coupon, type: :model do
       expect(@coupon1.redeemed).to eq(4)
     end
   end
+
+  describe "class methods" do 
+    it "can count number of active coupons and return false if 5 or more" do 
+      @merchant1 = Merchant.create!(name: "Hair Care")
+      
+      @coupon1 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+      @coupon2 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+      @coupon3 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+      @coupon4 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+      @coupon5 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+
+      expect(Coupon.active_coupon_under_five?).to eq(false)
+
+    end
+
+    it "can count number of active coupons and return true if less than um like 5" do 
+      @merchant1 = Merchant.create!(name: "Hair Care")
+      
+      @coupon1 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+      @coupon2 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+      @coupon3 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+      @coupon4 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+      @coupon5 = FactoryBot.create(:coupon, active: false, merchant_id: @merchant1.id)
+
+      expect(Coupon.active_coupon_under_five?).to eq(true)
+    end
+  end
 end

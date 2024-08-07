@@ -18,4 +18,10 @@ class Coupon < ApplicationRecord
   def redeemed 
     transactions.where("result=1").count
   end
+
+  def self.active_coupon_under_five?
+    where('coupons.active=true').count < 5
+  end
+
+
 end

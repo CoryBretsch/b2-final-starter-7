@@ -11,7 +11,7 @@
   <%= form.select :category, ["Percent Off", "Dollar Value Off"] %></p>
 
   <p><%= form.label :amount %>
-  <%= form.number_field :amount %></p>
+  <%= form.number_field :amount, in: 1..100 %></p>
 
   <p><%= form.submit "Create Coupon" %></p>
 <% end %>

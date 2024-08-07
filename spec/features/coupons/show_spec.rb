@@ -96,5 +96,18 @@ RSpec.describe "coupon show" do
       expect(page).to_not have_button("Activate")
       expect(page).to have_button("Deactivate")
     end
+
+    it "can give error if trying to activate a 6th coupon" do 
+      @coupon4 = FactoryBot.create(:coupon, category: 0, active: true, merchant_id: @merchant1.id)
+      @coupon5 = FactoryBot.create(:coupon, category: 1, active: true, merchant_id: @merchant1.id)
+      @coupon6 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+      @coupon7 = FactoryBot.create(:coupon, active: true, merchant_id: @merchant1.id)
+
+      visit merchant_coupon_path(@merchant1, @coupon2)
+      click_button "Activate"
+      
+      expect(Coupon.active_coupon_under_five?).to eq(false)
+      expect(page).to have_content("You already have 5 active coupons, unkay")
+    end
   end
 end
