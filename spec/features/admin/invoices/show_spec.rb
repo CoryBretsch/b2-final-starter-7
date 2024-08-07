@@ -4,11 +4,17 @@ describe "Admin Invoices Index Page" do
   before :each do
     @m1 = Merchant.create!(name: "Merchant 1")
 
+    @coupon1 = FactoryBot.create(:coupon, amount: 10, merchant_id: @m1.id, category: 0, active: true)
+    @coupon2 = FactoryBot.create(:coupon, amount: 10, merchant_id: @m1.id, category: 1, active: true)
+
     @c1 = Customer.create!(first_name: "Yo", last_name: "Yoz", address: "123 Heyyo", city: "Whoville", state: "CO", zip: 12345)
     @c2 = Customer.create!(first_name: "Hey", last_name: "Heyz")
 
     @i1 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: "2012-03-25 09:54:09")
     @i2 = Invoice.create!(customer_id: @c2.id, status: 1, created_at: "2012-03-25 09:30:09")
+
+    @i3 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: "2020-03-25 09:54:09", coupon_id: @coupon1.id)
+    @i4 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: "2020-03-25 09:54:09", coupon_id: @coupon2.id)
 
     @item_1 = Item.create!(name: "test", description: "lalala", unit_price: 6, merchant_id: @m1.id)
     @item_2 = Item.create!(name: "rest", description: "dont test me", unit_price: 12, merchant_id: @m1.id)
@@ -17,10 +23,13 @@ describe "Admin Invoices Index Page" do
     @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 6, unit_price: 1, status: 1)
     @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
 
-    visit admin_invoice_path(@i1)
+    @ii_4 = InvoiceItem.create!(invoice_id: @i3.id, item_id: @item_1.id, quantity: 12, unit_price: 2, status: 0)
+    @ii_5 = InvoiceItem.create!(invoice_id: @i4.id, item_id: @item_1.id, quantity: 12, unit_price: 2, status: 0)
+
   end
 
   it "should display the id, status and created_at" do
+    visit admin_invoice_path(@i1)
     expect(page).to have_content("Invoice ##{@i1.id}")
     expect(page).to have_content("Created on: #{@i1.created_at.strftime("%A, %B %d, %Y")}")
 
@@ -28,6 +37,7 @@ describe "Admin Invoices Index Page" do
   end
 
   it "should display the customers name and shipping address" do
+    visit admin_invoice_path(@i1)
     expect(page).to have_content("#{@c1.first_name} #{@c1.last_name}")
     expect(page).to have_content(@c1.address)
     expect(page).to have_content("#{@c1.city}, #{@c1.state} #{@c1.zip}")
@@ -36,6 +46,7 @@ describe "Admin Invoices Index Page" do
   end
 
   it "should display all the items on the invoice" do
+    visit admin_invoice_path(@i1)
     expect(page).to have_content(@item_1.name)
     expect(page).to have_content(@item_2.name)
 
@@ -54,12 +65,14 @@ describe "Admin Invoices Index Page" do
   end
 
   it "should display the total revenue the invoice will generate" do
+    visit admin_invoice_path(@i1)
     expect(page).to have_content("Total Revenue: $#{@i1.total_revenue}")
 
     expect(page).to_not have_content(@i2.total_revenue)
   end
 
   it "should have status as a select field that updates the invoices status" do
+    visit admin_invoice_path(@i1)
     within("#status-update-#{@i1.id}") do
       select("cancelled", :from => "invoice[status]")
       expect(page).to have_button("Update Invoice")
@@ -68,5 +81,20 @@ describe "Admin Invoices Index Page" do
       expect(current_path).to eq(admin_invoice_path(@i1))
       expect(@i1.status).to eq("completed")
     end
+  end
+
+  describe "user story 8" do 
+    it "can display percent coupon total revenue with name as link to show page" do 
+      visit admin_invoice_path(@i3)
+
+      expect(page).to have_content("Grand Total After Coupon: #{@i3.revenue_coupon_percent(@coupon1.amount)}")
+    end
+
+    it "can display dollar coupon total revenue with name as link to show page" do 
+      visit admin_invoice_path(@i4)
+save_and_open_page
+      expect(page).to have_content("Grand Total After Coupon: #{@i4.revenue_coupon_dollar(@coupon2.amount)}")
+    end
+
   end
 end

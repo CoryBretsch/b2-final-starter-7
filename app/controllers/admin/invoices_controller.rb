@@ -5,6 +5,14 @@ class Admin::InvoicesController < ApplicationController
   end
 
   def show
+    if @invoice.coupon_id 
+      @coupon = Coupon.find(@invoice.coupon_id)
+      if @coupon.category == "Percent Off"
+        @grand_total = @invoice.revenue_coupon_percent(@coupon.amount)
+      else
+        @grand_total = @invoice.revenue_coupon_dollar(@coupon.amount)
+      end
+    end
   end
 
   def edit
