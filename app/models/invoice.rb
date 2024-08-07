@@ -20,6 +20,11 @@ class Invoice < ApplicationRecord
   end
 
   def revenue_coupon_dollar(amount)
-    total_revenue - amount
+    total = total_revenue - amount
+    if total < 0
+      total = 0
+    end
+    total
   end
+
 end

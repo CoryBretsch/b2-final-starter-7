@@ -6,6 +6,7 @@ describe "Admin Invoices Index Page" do
 
     @coupon1 = FactoryBot.create(:coupon, amount: 10, merchant_id: @m1.id, category: 0, active: true)
     @coupon2 = FactoryBot.create(:coupon, amount: 10, merchant_id: @m1.id, category: 1, active: true)
+    @coupon3 = FactoryBot.create(:coupon, amount: 1000, merchant_id: @m1.id, category: 1, active: true)
 
     @c1 = Customer.create!(first_name: "Yo", last_name: "Yoz", address: "123 Heyyo", city: "Whoville", state: "CO", zip: 12345)
     @c2 = Customer.create!(first_name: "Hey", last_name: "Heyz")
@@ -15,6 +16,7 @@ describe "Admin Invoices Index Page" do
 
     @i3 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: "2020-03-25 09:54:09", coupon_id: @coupon1.id)
     @i4 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: "2020-03-25 09:54:09", coupon_id: @coupon2.id)
+    @i5 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: "2020-03-25 09:54:09", coupon_id: @coupon3.id)
 
     @item_1 = Item.create!(name: "test", description: "lalala", unit_price: 6, merchant_id: @m1.id)
     @item_2 = Item.create!(name: "rest", description: "dont test me", unit_price: 12, merchant_id: @m1.id)
@@ -25,6 +27,7 @@ describe "Admin Invoices Index Page" do
 
     @ii_4 = InvoiceItem.create!(invoice_id: @i3.id, item_id: @item_1.id, quantity: 12, unit_price: 2, status: 0)
     @ii_5 = InvoiceItem.create!(invoice_id: @i4.id, item_id: @item_1.id, quantity: 12, unit_price: 2, status: 0)
+    @ii_6 = InvoiceItem.create!(invoice_id: @i5.id, item_id: @item_1.id, quantity: 12, unit_price: 2, status: 0)
 
   end
 
@@ -92,8 +95,14 @@ describe "Admin Invoices Index Page" do
 
     it "can display dollar coupon total revenue with name as link to show page" do 
       visit admin_invoice_path(@i4)
-save_and_open_page
+
       expect(page).to have_content("Grand Total After Coupon: #{@i4.revenue_coupon_dollar(@coupon2.amount)}")
+    end
+
+    it "can display grand total as 0 calculation is negative for dollar coupon" do 
+      visit admin_invoice_path(@i5)
+
+      expect(page).to have_content("Grand Total After Coupon: 0")
     end
 
   end
