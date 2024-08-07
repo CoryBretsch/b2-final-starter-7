@@ -84,8 +84,8 @@ namespace :csv_load do
       puts "InvoiceItems imported."
    end
 
-   task :all do 
-      [:customers, :invoices, :merchants, :items, :invoice_items, :transactions].each do |task|
+   task :all_but_merchants do 
+      [:customers, :invoices, :items, :invoice_items, :transactions].each do |task|
          Rake::Task["csv_load:#{task}".to_sym].invoke
       end
    end
